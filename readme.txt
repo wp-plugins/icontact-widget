@@ -6,7 +6,7 @@ Stable tag: 1.0.1
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=iContact%20Newsletter%20Widget&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 
-Add the iContact signup form to your sidebar, and convert the form from Javascript to faster-loading HTML.
+Add the iContact signup form to your sidebar, and convert the form from Javascript to faster-loading HTML. Requires WordPress 2.8.
 
 == Description ==
 __Simple iContact Installation on Your Blog__
