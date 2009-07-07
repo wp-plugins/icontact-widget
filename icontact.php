@@ -3,7 +3,7 @@
  * Plugin Name: iContact Widget
  * Plugin URI: http://seodenver.com/icontact-widget/
  * Description: Add the iContact signup form to your sidebar, and convert the form from Javascript to faster-loading HTML.
- * Version: 1.0
+ * Version: 1.0.1
  * Author: Katz Web Design
  * Author URI: http://katzwebdesign.net
  *
