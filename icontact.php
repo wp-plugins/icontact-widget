@@ -3,7 +3,7 @@
  * Plugin Name: iContact Widget
  * Plugin URI: http://www.seodenver.com/icontact-widget/
  * Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Katz Web Design
  * Author URI: http://katzwebdesign.net
  *
@@ -19,10 +19,11 @@ Versions
 1.0.1	- Added error handling and HTTPS option
 1.0.2	- Improved error handling, and prevented form from being shown until it works properly.
 		- Added settings: Edit HTML capability, Change input width, Change Submit input text, Change form width
+1.0.3	- Added missing closing </form> tag
 
 */
 
-$kwd_ic_version = '1.0.2';
+$kwd_ic_version = '1.0.3';
 
 add_action( 'widgets_init', 'kwd_load_widgets' );
 
@@ -34,7 +35,8 @@ function kwd_load_widgets() {
 class iContactWidget extends WP_Widget {
  
     function iContactWidget() {
-        parent::WP_Widget(false, $name = 'iContact Form');    
+    	$widget_options = array('description'=>'Add an iContact form to your and start adding to your lists!', 'classname' => 'icontact');
+        parent::WP_Widget(false, $name = 'iContact Signup Form', $widget_options);    
     }
  
  
@@ -221,7 +223,7 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 	
 	// Remove JS Formatting
 	$code = str_ireplace('document.write("', '', $code);
-	$code = str_ireplace('\n<\/form>\n");', '', $code);
+	$code = str_ireplace('\n<\/form>\n");', "\n</form>", $code);
 	$code = str_ireplace('\"', '"', $code);
 	$code = str_ireplace('\"', '"', $code);
 	$code = str_ireplace('\"', '"', $code);
@@ -242,6 +244,7 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 	$code = str_ireplace('valign=top', 'valign="top"', $code);
 	$code = str_ireplace('align=right', 'align="right"', $code);
 	$code = str_ireplace('align=left', 'align="left"', $code);
+	$code = str_ireplace('method=post', 'method="post"', $code);
 	
 	// Enter custom values
 	$code = str_ireplace('value="Submit"', 'value="'.$submit.'"', $code);

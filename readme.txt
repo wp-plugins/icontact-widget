@@ -2,7 +2,7 @@
 Tags: icontact, widget, newsletter, form, signup, newsletter widget, email newsletter form, newsletter form, newsletter signup, email widget, email marketing, newsletter, form, signup
 Requires at least: 2.8
 Tested up to: 2.8.2
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=iContact%20Newsletter%20Widget&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 
@@ -25,8 +25,19 @@ iContact is a leader in email newsletters and surveys. Their toolset is cost eff
 
 1. How the widget appears in the Widgets panel 
 
-== Version History ==
-* 1.0.2 - Improved error handling, and prevented form from being shown until it works properly.
-		- Added settings: Edit HTML capability, Change input width, Change Submit input text, Change form width
-* 1.0.1 - Added PHP `file_get_content()` error handling and HTTPS form option
-* 1.0 - Launched widget
+== Changelog ==
+
+= 1.0.3 = 
+* Added missing closing </form> tag to signup form.
+* Added widget description for the wp-admin Widgets page.
+
+= 1.0.2 =
+* Improved error handling, and prevented form from being shown until it works properly.
+* Added settings: Edit HTML capability, Change input width, Change Submit input text, Change form width
+
+= 1.0.1 = 
+* Added PHP `file_get_content()` error handling
+* Added HTTPS form option
+
+= 1.0 =
+* Launched widget
