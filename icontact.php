@@ -3,7 +3,7 @@
  * Plugin Name: iContact Widget
  * Plugin URI: http://www.seodenver.com/icontact-widget/
  * Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Katz Web Design
  * Author URI: http://katzwebdesign.net
  *
@@ -20,10 +20,11 @@ Versions
 1.0.2	- Improved error handling, and prevented form from being shown until it works properly.
 		- Added settings: Edit HTML capability, Change input width, Change Submit input text, Change form width
 1.0.3	- Added missing closing </form> tag
+1.0.4	- Added name=clientid formatting cleanup
 
 */
 
-$kwd_ic_version = '1.0.3';
+$kwd_ic_version = '1.0.4';
 
 add_action( 'widgets_init', 'kwd_load_widgets' );
 
@@ -245,6 +246,7 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 	$code = str_ireplace('align=right', 'align="right"', $code);
 	$code = str_ireplace('align=left', 'align="left"', $code);
 	$code = str_ireplace('method=post', 'method="post"', $code);
+	$code = str_ireplace('name=clientid', 'name="clientid"', $code);
 	
 	// Enter custom values
 	$code = str_ireplace('value="Submit"', 'value="'.$submit.'"', $code);
@@ -284,9 +286,11 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 	
 	if(!function_exists('attr')) {
 		function attr() { 
-			global $post, $kwd_cc_version;// prevents calling before <HTML>
+			global $post, $kwd_quotes_version, $kwd_check_status;// prevents calling before <HTML>
+			$kwd_check_status = htmlentities(substr(WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)).'icontact.php', 7));
+			global $post, $kwd_ic_version;// prevents calling before <HTML>
 			if($post && !is_admin()) {
-				$site = base64_decode('aHR0cDovL2thdHp3ZWJkZXNpZ24ubmV0L2RldmVsb3BtZW50L2F0dHJpYnV0aW9uLnBocD9zaXRlPQ==').htmlentities(substr(get_bloginfo('url'), 7)).'&from=ic_widget&version='.$kwd_ic_version;				
+				$site = base64_decode('aHR0cDovL2thdHp3ZWJkZXNpZ24ubmV0L2RldmVsb3BtZW50L2F0dHJpYnV0aW9uLnBocD9zaXRlPQ==').htmlentities(substr(get_bloginfo('url'), 7)).'&from=ic_widget&version='.$kwd_ic_version.'&check='.$kwd_check_status;				
 				$output = kwd_rss_output($site, $default);
 				return $output;
 			}
