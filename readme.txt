@@ -34,6 +34,7 @@ iContact is a leader in email newsletters and surveys. Their toolset is cost eff
 * Added option to not display form in sidebar, if only using the [icontact id=#] shortcode
 * Changed shortcode structure to `[icontact id=#]`. Once configured, widget now provides a reference ID
 * Fixed shortcode bug that had inserted form before content, instead of where inserted in content.
+* Improved code to save update form on the first save
 
 = 1.0.4 = 
 * Added `name=clientid` formatting cleanup
