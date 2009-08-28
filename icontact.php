@@ -3,7 +3,7 @@
  * Plugin Name: iContact Widget
  * Plugin URI: http://www.seodenver.com/icontact-widget/
  * Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Katz Web Design
  * Author URI: http://katzwebdesign.net
  *
@@ -21,10 +21,14 @@ Versions
 		- Added settings: Edit HTML capability, Change input width, Change Submit input text, Change form width
 1.0.3	- Added missing closing </form> tag
 1.0.4	- Added name=clientid formatting cleanup
-
+1.0.5	- Added better support for multiple widgets
+		- Improved validation by adding closing slashes to <input>s
+		- Fixed issue with multiple instances of same form preventing javascript validation
+		- Added option to not display form in sidebar, if only using the [icontact id=#] shortcode
+		- Fixed shortcode bug that had inserted form before content, instead of where inserted in content by using return instead of echo
 */
 
-$kwd_ic_version = '1.0.4';
+$kwd_ic_version = '1.0.5';
 
 add_action( 'widgets_init', 'kwd_load_widgets' );
 
@@ -41,79 +45,95 @@ class iContactWidget extends WP_Widget {
     }
  
  
-    function widget($args, $instance) {        
+    function widget($args, $instance) {      
         extract( $args );
-        $title = $instance['title'];
-        $formcode = $instance['formcode'];
-        $finalcode = $instance['generated_code'];
-        $link = '<a href="http://snurl.com/icontact_1" rel="nofollow" style="font-family: Arial, Helvetica, sans-serif; text-align:center; display:block; line-height:1; margin-top:.75em;"><font size="2">Email Marketing by iContact</font></a>';
-        // Please leave this in and give credit where credit is due.
-        $comment = '<!-- iContact Widget for WordPress by Katz Web Design -->';
-        if(!empty($finalcode) && strlen($finalcode) > 20) {
-	        $finalcode = str_ireplace($link, '', $finalcode);
-			$finalcode = str_ireplace($comment, '', $finalcode);
-	       	$attr = attr();
-			if(!empty($attr)) {
-				$finalcode .= $attr;
-			} else {
-				$finalcode .= $link;
-				$finalcode .= $comment;
-			} 
-        ?>
-              <?php echo $before_widget; ?>
-                  <?php echo $before_title . $title . $after_title; ?>
- 
-                      <?php echo "\n\t".$finalcode."\n\t"; ?>
- 
-              <?php echo $after_widget; ?>
-        <?php
-        } else {
-			echo '
-				<!--
-				//
-				// iCONTACT WIDGET 
-				//
-				There is an error with the iContact widget configuration on this website. 
-				//
-				//
-				//
-				-->';
-		}
+        if($instance['hide'] != 'yes') {
+        
+	        $finalcode = '';
+	        $title = $instance['title'];
+	        $formcode = $instance['formcode'];
+	        if($instance['override'] == 'yes') {
+	        	$finalcode = $instance['edited_code'];
+	        } else {
+	        	$finalcode = $instance['generated_code'];
+	        }
+	        
+	        // This way, if there is more than one of the same form, they each have an unique ID
+	        $altnumber = rand(0, 1000000);
+	       	$finalcode = str_ireplace('icpsignup', 'icpsignup'.$altnumber, $finalcode);
+	       	
+	        $link = '<a href="http://snurl.com/icontact_1" rel="nofollow" style="font-family: Arial, Helvetica, sans-serif; text-align:center; display:block; line-height:1; margin-top:.75em;"><font size="2">Email Marketing by iContact</font></a>';
+	        // Please leave this in and give credit where credit is due.
+	        $comment = '<!-- iContact Widget for WordPress by Katz Web Design -->';
+	        if(!empty($finalcode) && strlen($finalcode) > 20) {
+		        $finalcode = str_ireplace($link, '', $finalcode);
+				$finalcode = str_ireplace($comment, '', $finalcode);
+		       	$attr = attr();
+				if(!empty($attr)) { $finalcode .= $attr.$comment; } else { $finalcode .= $link.$comment; } 
+	        ?>
+	              <?php echo $before_widget; ?>
+	                  <?php echo $before_title . $title . $after_title; ?>
+	 
+	                      <?php echo "\n\t".$finalcode."\n\t"; ?>
+	 
+	              <?php echo $after_widget; ?>
+	        <?php
+	        // If there is no finalcode generated
+	        } else {
+				echo '
+					<!--
+					//
+					// iCONTACT WIDGET 
+					//
+					There is an error with the iContact widget configuration on this website. 
+					//
+					//
+					//
+					-->';
+			}
+		} // end if hide
     }
  
-    function update($new_instance, $old_instance) { 
+    function update($new_instance, $old_instance) {
     	$instance = $old_instance;
 		$instance['title'] = strip_tags( $new_instance['title'] );
+		
 		$instance['formcode'] = $new_instance['formcode'];
-		$instance['generated_code'] = $new_instance['generated_code'];
+		if($instance['initiated'] != true || $instance['override'] != 'yes') {
+			$instance['generated_code'] =  kwd_process_form($instance['formcode'], $instance['https'], $instance['submittext'], $instance['inputsize'], $instance['tablewidth'], $this->number);
+		}
+		//$instance['generated_code'] = $new_instance['generated_code'];
 		$instance['edited_code'] = $new_instance['generated_code'];
 		$instance['https'] = $new_instance['https'];
 		$instance['inputsize'] = $new_instance['inputsize'];
 		$instance['override'] = $new_instance['override'];
 		$instance['submittext'] = $new_instance['submittext'];
 		$instance['tablewidth'] = $new_instance['tablewidth'];
+		$instance['hide'] = $new_instance['hide'];
 		$instance['initiated'] = true;
         return $instance;
     }
  
-    function form($instance) {              
+    function form($instance) {
         $title = esc_attr($instance['title']);
         $formcode = $instance['formcode'];
         $inputsize = $instance['inputsize'];
+        if(is_int($this->number) || !$this->number) { $number = $this->number; echo '<p><strong>iContact Widget ID='.$number.'</strong></p>'; } else { $number = '#';}
         if(isset($instance['initiated'])) { $initiated = true; } else { $initiated=false;}
         if($instance['override'] != 'yes') {
-        	$finalcode = kwd_process_form($instance['formcode'], $instance['https'], $instance['submittext'], $instance['inputsize'], $instance['tablewidth']);
+        	$finalcode = kwd_process_form($instance['formcode'], $instance['https'], $instance['submittext'], $instance['inputsize'], $instance['tablewidth'], $number);
         } else {
         	$finalcode = $instance['edited_code'];
         }
         $error = '';
         if(!$finalcode && $initiated) {
-        	$error = '<div style="border:1px solid red; margin:10px 0; background:white; padding:5px;"><p><strong>There was an error processing the form code</strong> you entered into the "Automatic Sign-up Form Code" field.</p> <p>Please make sure you\'re pasting the <a href="http://www.icontact.com/help/question.php?ID=149" rel="nofollow">iContact-generated Automatic Sign-up Form code</a>, and try again.</p><p>If you still are having problems, please <a href="http://www.seodenver.com/icontact-widget/">leave a comment on the widget page</a>.</div>';
+        	$error = '<div style="border:1px solid red; margin:10px 0; background:white; padding:5px;"><p><strong>There was an error processing the form code</strong> you entered into the "Automatic Sign-up Form Code" field.</p> <p>Please make sure you\'re pasting the <a href="http://www.icontact.com/help/question.php?ID=149" rel="nofollow">iContact-generated Automatic Sign-up Form code</a>, and try again.</p><p>If you still are having problems, please <a href="http://www.seodenver.com/icontact-widget/">leave a comment on the widget page</a>.</p></div>';
         }
         
         ?>
         	<p>Don&#8217;t use iContact? You need it for this widget to work, so test drive it with <a href="http://snurl.com/icontact_1">a 15 day free trial</a>.</p>
         	<p>Generate your iContact signup form by <a href="http://www.icontact.com/help/question.php?ID=149" rel="nofollow">following the instructions on iContact.com</a>. Paste the Automatic Sign-up Form code below.</p>
+        	<p>You can embed the form in post or page content by using the following code: <code>[icontact id=<?php echo $number; ?>]</code>. <?php if($number == '#') { ?><small>(The ID will show once the widget is saved for the first time.)</small><?php } ?></p>
         	<p>If you have made changes to your form, click Save again, and the form HTML will update.</p>
             <p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
             <?php echo $error; ?>
@@ -124,6 +144,9 @@ class iContactWidget extends WP_Widget {
             <?php  } ?>
             <?php kwd_make_checkbox($instance['override'], $this->get_field_id('override'),$this->get_field_name('override'), 'Don&#8217;t overwrite changes to HTML code<br /><small>Use only if you are going to edit the generated code. <strong>This will prevent changes in the settings.</strong> Uncheck to change form settings!</small>'); ?>
              <?php kwd_make_checkbox($instance['https'], $this->get_field_id('https'),$this->get_field_name('https'), 'Make Form HTTPS'); ?>
+             
+             <?php kwd_make_checkbox($instance['hide'], $this->get_field_id('hide'),$this->get_field_name('hide'), 'Do not display widget in sidebar.<br /><small>If you are exclusively using the [icontact id='.$number.'] shortcode, not the sidebar widget. Note: you can use a widget in <em>both</em> sidebar and shortcode at the same time.</small>'); ?>
+             
         <p>
 		<label for="<?php echo $this->get_field_id('inputsize'); ?>">Width of form inputs (in characters)</label>
 		<select id="<?php echo $this->get_field_id('inputsize'); ?>" name="<?php echo $this->get_field_name('inputsize'); ?>">
@@ -160,7 +183,6 @@ class iContactWidget extends WP_Widget {
 			  <option value="40"<?php if($inputsize == 40) { echo ' selected="selected"'; }?>>40</option>
 		  </select>
 		</p>
-            
             <?php kwd_make_textfield($initiated, true, 'Submit', $instance['submittext'], $this->get_field_id('submittext'),$this->get_field_name('submittext'), 'Change Submit Button Text'); ?>
             <?php kwd_make_textfield($initiated, true, '260', $instance['tablewidth'], $this->get_field_id('tablewidth'),$this->get_field_name('tablewidth'), 'Change the Width of the Form (in pixels or %)<br /><small>Example: <code>260</code> for 260px or <code>100%</code></small>'); ?>
             
@@ -193,15 +215,25 @@ function kwd_make_checkbox($setting = '', $fieldid = '', $fieldname='', $title =
     echo $checkbox;
 }	
 
-function kwd_ic_shortcode() {
-		global $post;
-		if(!is_admin()) { $settings = get_option('widget_icontactwidget');  echo $settings[3]['generated_code'];} // get sidebar settings, echo finalcode
+function kwd_ic_shortcode($atts) {
+	global $post; // prevent before content
+		$atts = extract(shortcode_atts(array('id' => '1'), $atts)); 
+		if(!$id) { $id = 3;}
+		if(!is_admin()) { 
+			$settings = get_option('widget_icontactwidget');
+			if($settings[$id]['override'] == 'yes') {
+	        	$finalcode = $settings[$id]['edited_code'];
+	        } else {
+	        	$finalcode = $settings[$id]['generated_code'];
+	        }
+			return $finalcode;
+		} // get sidebar settings, echo finalcode
 }
 add_shortcode('iContact', 'kwd_ic_shortcode');
 add_shortcode('icontact', 'kwd_ic_shortcode');
 	
 
-function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize = '', $width = '260') {
+function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize = '', $width = '260', $number = 1) {
 	
 	if(empty($submit)) { $submit = 'Submit';}
 
@@ -233,6 +265,8 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 	$code = str_ireplace('font>', 'font>', $code);
 	$code = str_ireplace('<\/', '</', $code);
 	$code = str_ireplace('\n', "\n", $code);
+	$code = str_ireplace('if (document.location.protocol === "https:")', '', $code);
+	$code = str_ireplace('document.icpsignup.action = "https://app.icontact.com/icp/signup.php";', '', $code);
 	
 	// Fix XHTML issues
 	$code = str_ireplace('type=text', 'type="text"', $code);
@@ -246,7 +280,19 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 	$code = str_ireplace('align=right', 'align="right"', $code);
 	$code = str_ireplace('align=left', 'align="left"', $code);
 	$code = str_ireplace('method=post', 'method="post"', $code);
+	$code = str_ireplace('method="post"', 'method="post" class="iContactForm"', $code);
 	$code = str_ireplace('name=clientid', 'name="clientid"', $code);
+	$code = str_ireplace('</tr><td', '</tr><tr><td', $code);
+	$code = str_ireplace('<style>', '<style type="text/css">', $code);
+	$code = str_ireplace('<input type="hidden" name="redirect"', '<div><input type="hidden" name="redirect"', $code);
+	$code = str_ireplace('<script type="text/javascript">', '</div><script type="text/javascript">', $code);
+	$code = preg_replace('/<input([^<]+?[^\/])>/i', '<input$1 />', $code); // Add trailing slashes to inputs
+	$code = str_ireplace('<div id="SignUp">', '<div class="SignUp">', $code); // for multiple instances
+	
+	// Add numbering
+	$code = str_ireplace('name="icpsignup"', 'name="icpsignup'.$number.'"', $code);
+	$code = str_ireplace('verifyRequired()', 'verifyRequired'.$number.'()', $code);
+	$code = str_ireplace('document.icpsignup', 'document.icpsignup'.$number, $code);
 	
 	// Enter custom values
 	$code = str_ireplace('value="Submit"', 'value="'.$submit.'"', $code);
