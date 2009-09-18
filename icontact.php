@@ -122,6 +122,7 @@ class iContactWidget extends WP_Widget {
         if(isset($instance['initiated'])) { $initiated = true; } else { $initiated=false;}
         if($instance['override'] != 'yes') {
         	$finalcode = kwd_process_form($instance['formcode'], $instance['https'], $instance['submittext'], $instance['inputsize'], $instance['tablewidth'], $number);
+        	if(is_array($finalcode)) { $error = $finalcode[1]; }
         } else {
         	$finalcode = $instance['edited_code'];
         }
@@ -249,8 +250,22 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 		if($https) {
 			$src = preg_replace('/(^https?)(:\/\/.+)/i', '$1s$2', $src);
 		}
-		$code = file_get_contents($src);
+		$code = @file_get_contents($src);
+		if(!$code) {
+			$ch = curl_init(); 
+			$timeout = 0; 
+			curl_setopt ($ch, CURLOPT_URL, $src); 
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1); 
+			curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout); 
+			$code = @curl_exec($ch); 
+			curl_close($ch);
+		}
+		if(!$code) {
+			$error = true;
+			$errormsg = 'Your server configuration does not support this widget. Ask them to enable <code>file_get_contents()</code>';
+		}
 	} else {
+		$errormsg = 'The iContact file was not accessible for some reason.';
 		$error = true;
 	}
 	
@@ -302,7 +317,7 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 	if(!$error) {
 		return $code;
 	} else {
-		return false;
+		return array(false,$errormsg);
 	}
 }
 

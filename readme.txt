@@ -2,7 +2,7 @@
 Tags: icontact, widget, newsletter, form, signup, newsletter widget, email newsletter form, newsletter form, newsletter signup, email widget, email marketing, newsletter, form, signup
 Requires at least: 2.8
 Tested up to: 2.8.4
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=iContact%20Newsletter%20Widget&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 
@@ -19,13 +19,17 @@ Includes __shortcode support__ -- add an iContact form in any page or post by ty
 __Don't use iContact? [Try it free for 15 days](http://snurl.com/icontact_1).__
 iContact is a leader in email newsletters and surveys. Their toolset is cost effective, and full-featured compared to their competitors. If you haven't chosen a email newsletter company, you should [try iContact](http://snurl.com/icontact_1).
 
-### Created by a [Denver SEO Company](http://www.katzwebdesign.net).
+### Created by a [Denver SEO Company](http://www.katzwebservices.com).
 
 == Screenshots ==
 
 1. How the widget appears in the Widgets panel 
 
 == Changelog ==
+
+= 1.0.6 =
+* Added support for `curl` for servers that don't support `file_get_contents()`
+* Fixed issue where you had to save widget two times for it to update
 
 = 1.0.5 =
 * Added support for multiple widgets, and multiple instances of the same widget on a page
