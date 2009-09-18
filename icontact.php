@@ -3,9 +3,9 @@
  * Plugin Name: iContact Widget
  * Plugin URI: http://www.seodenver.com/icontact-widget/
  * Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
- * Version: 1.0.5
- * Author: Katz Web Design
- * Author URI: http://katzwebdesign.net
+ * Version: 1.0.6
+ * Author: Katz Web Services, Inc.
+ * Author URI: http://www.katzwebservices.com
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -26,9 +26,11 @@ Versions
 		- Fixed issue with multiple instances of same form preventing javascript validation
 		- Added option to not display form in sidebar, if only using the [icontact id=#] shortcode
 		- Fixed shortcode bug that had inserted form before content, instead of where inserted in content by using return instead of echo
+1.0.6	- Fixed issue where you had to save widget two times for it to update
+		- Added support for `curl` for servers that don't support `file_get_contents()`
 */
 
-$kwd_ic_version = '1.0.5';
+$kwd_ic_version = '1.0.6';
 
 add_action( 'widgets_init', 'kwd_load_widgets' );
 
@@ -99,9 +101,6 @@ class iContactWidget extends WP_Widget {
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		
 		$instance['formcode'] = $new_instance['formcode'];
-		if($instance['initiated'] != true || $instance['override'] != 'yes') {
-			$instance['generated_code'] =  kwd_process_form($instance['formcode'], $instance['https'], $instance['submittext'], $instance['inputsize'], $instance['tablewidth'], $this->number);
-		}
 		//$instance['generated_code'] = $new_instance['generated_code'];
 		$instance['edited_code'] = $new_instance['generated_code'];
 		$instance['https'] = $new_instance['https'];
@@ -110,6 +109,9 @@ class iContactWidget extends WP_Widget {
 		$instance['submittext'] = $new_instance['submittext'];
 		$instance['tablewidth'] = $new_instance['tablewidth'];
 		$instance['hide'] = $new_instance['hide'];
+		if($instance['initiated'] != true || $instance['override'] != 'yes') {
+			$instance['generated_code'] =  kwd_process_form($instance['formcode'], $instance['https'], $instance['submittext'], $instance['inputsize'], $instance['tablewidth'], $this->number);
+		}
 		$instance['initiated'] = true;
         return $instance;
     }
@@ -120,7 +122,7 @@ class iContactWidget extends WP_Widget {
         $inputsize = $instance['inputsize'];
         if(is_int($this->number) || !$this->number) { $number = $this->number; echo '<p><strong>iContact Widget ID='.$number.'</strong></p>'; } else { $number = '#';}
         if(isset($instance['initiated'])) { $initiated = true; } else { $initiated=false;}
-        if($instance['override'] != 'yes') {
+        if($instance['override'] != 'yes' || !$initiated) {
         	$finalcode = kwd_process_form($instance['formcode'], $instance['https'], $instance['submittext'], $instance['inputsize'], $instance['tablewidth'], $number);
         	if(is_array($finalcode)) { $error = $finalcode[1]; }
         } else {
@@ -141,7 +143,7 @@ class iContactWidget extends WP_Widget {
             <p><label for="<?php echo $this->get_field_id('formcode'); ?>"><?php _e('Automatic Sign-up Form Code:'); ?> <textarea class="widefat" cols="20" rows="10" id="<?php echo $this->get_field_id('formcode'); ?>" name="<?php echo $this->get_field_name('formcode'); ?>" style="font-size:11px"><?php echo $instance['formcode']; ?></textarea></label></p>
 
             <?php if(!empty($finalcode)) { ?>
-            <p><label for="<?php echo $this->get_field_id('generated_code'); ?>"><?php _e('Displayed HTML Form Code:'); ?> <textarea class="widefat" cols="20" rows="10" id="<?php echo $this->get_field_id('generated_code'); ?>" name="<?php echo $this->get_field_name('generated_code'); ?>" style="font-size:11px"><?php echo $finalcode; ?></textarea></label></p>
+            <p><label for="<?php echo $this->get_field_id('generated_code'); ?>"><?php _e('Displayed HTML Form Code:'); ?> <textarea class="widefat" cols="20" rows="10" id="<?php echo $this->get_field_id('generated_code'); ?>" name="<?php echo $this->get_field_name('generated_code'); ?>" style="font-size:11px"><?php if(is_array($finalcode)) { echo $finalcode[1]; } else { echo $finalcode; }  ?></textarea></label></p>
             <?php  } ?>
             <?php kwd_make_checkbox($instance['override'], $this->get_field_id('override'),$this->get_field_name('override'), 'Don&#8217;t overwrite changes to HTML code<br /><small>Use only if you are going to edit the generated code. <strong>This will prevent changes in the settings.</strong> Uncheck to change form settings!</small>'); ?>
              <?php kwd_make_checkbox($instance['https'], $this->get_field_id('https'),$this->get_field_name('https'), 'Make Form HTTPS'); ?>
@@ -250,7 +252,8 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 		if($https) {
 			$src = preg_replace('/(^https?)(:\/\/.+)/i', '$1s$2', $src);
 		}
-		$code = @file_get_contents($src);
+		$code = file_get_contents($src);
+		
 		if(!$code) {
 			$ch = curl_init(); 
 			$timeout = 0; 
@@ -262,7 +265,7 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 		}
 		if(!$code) {
 			$error = true;
-			$errormsg = 'Your server configuration does not support this widget. Ask them to enable <code>file_get_contents()</code>';
+			$errormsg = "\t\t\t===\nYour server configuration does not support this widget.\n\nAsk your host to enable file_get_contents() or curl()\n\t\t\t===";
 		}
 	} else {
 		$errormsg = 'The iContact file was not accessible for some reason.';
@@ -317,7 +320,7 @@ function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize =
 	if(!$error) {
 		return $code;
 	} else {
-		return array(false,$errormsg);
+		return array(false, $errormsg);
 	}
 }
 
