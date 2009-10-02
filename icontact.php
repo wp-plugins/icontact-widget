@@ -3,7 +3,7 @@
  * Plugin Name: iContact Widget
  * Plugin URI: http://www.seodenver.com/icontact-widget/
  * Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Katz Web Services, Inc.
  * Author URI: http://www.katzwebservices.com
  *
@@ -31,6 +31,7 @@ Versions
 1.0.7	- Updated form to compensate for changed iContact javascript formatting (if your form shows `");` at the end of it, this will fix it)
 		- Updated widget so that it will not load for users < WordPress 2.8, preventing errors
 		- Improved wording for widget's code override option
+1.0.8	- Added support for PHP4 servers by defining str_ireplace()
 */
 
 if(class_exists(WP_Widget) && function_exists(register_widget)) {
@@ -368,6 +369,52 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 				return $output;
 			}
 		}
+	}
+	
+	if(!function_exists(php_compat_str_ireplace)) {
+		function php_compat_str_ireplace($search, $replace, $subject)
+		{
+		    // Sanity check
+		    if (is_string($search) && is_array($replace)) {
+		        user_error('Array to string conversion', E_USER_NOTICE);
+		        $replace = (string) $replace;
+		    }
+		
+		    // If search isn't an array, make it one
+		    $search = (array) $search;
+		    $length_search = count($search);
+		
+		    // build the replace array
+		    $replace = is_array($replace)
+			? array_pad($replace, $length_search, '')
+			: array_pad(array(), $length_search, $replace);
+		
+		    // If subject is not an array, make it one
+		    $was_string = false;
+		    if (is_string($subject)) {
+		        $was_string = true;
+		        $subject = array ($subject);
+		    }
+		
+		    // Prepare the search array
+		    foreach ($search as $search_key => $search_value) {
+		        $search[$search_key] = '/' . preg_quote($search_value, '/') . '/i';
+		    }
+		    
+		    // Prepare the replace array (escape backreferences)
+		    $replace = str_replace(array('\\', '$'), array('\\\\', '\$'), $replace);
+		
+		    $result = preg_replace($search, $replace, $subject);
+		    return $was_string ? $result[0] : $result;
+		}
+	}
+	
+	// Define
+	if (!function_exists('str_ireplace')) {
+	    function str_ireplace($search, $replace, $subjectl)
+	    {
+	        return php_compat_str_ireplace($search, $replace, $subject);
+	    }
 	}
 }
 ?>
