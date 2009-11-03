@@ -3,7 +3,7 @@
  * Plugin Name: iContact Widget
  * Plugin URI: http://www.seodenver.com/icontact-widget/
  * Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Katz Web Services, Inc.
  * Author URI: http://www.katzwebservices.com
  *
@@ -31,11 +31,12 @@ Versions
 1.0.7	- Updated form to compensate for changed iContact javascript formatting (if your form shows `");` at the end of it, this will fix it)
 		- Updated widget so that it will not load for users < WordPress 2.8, preventing errors
 		- Improved wording for widget's code override option
-1.0.8	- Added support for PHP4 servers by defining str_ireplace()
+1.0.8	- Added support for PHP4 servers by defining str_replace()
+1.0.9	- Attempted fix for certain hosting configurations
 */
 
 if(class_exists(WP_Widget) && function_exists(register_widget)) {
-	$kwd_ic_version = '1.0.7';
+	$kwd_ic_version = '1.0.9';
 	add_action( 'widgets_init', 'kwd_load_widgets' );
 	
 	function kwd_load_widgets() {
@@ -66,14 +67,14 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 		        
 		        // This way, if there is more than one of the same form, they each have an unique ID
 		        //$altnumber = rand(0, 1000000);
-		       	$finalcode = str_ireplace('icpsignup', 'icpsignup'.$this->number, $finalcode);
+		       	$finalcode = str_replace('icpsignup', 'icpsignup'.$this->number, $finalcode);
 		       	
 		        $link = '<a href="http://snurl.com/icontact_1" rel="nofollow" style="font-family: Arial, Helvetica, sans-serif; text-align:center; display:block; line-height:1; margin-top:.75em;"><font size="2">Email Marketing by iContact</font></a>';
 		        // Please leave this in and give credit where credit is due.
 		        $comment = '<!-- iContact Widget for WordPress by Katz Web Design -->';
 		        if(!empty($finalcode) && strlen($finalcode) > 20) {
-			        $finalcode = str_ireplace($link, '', $finalcode);
-					$finalcode = str_ireplace($comment, '', $finalcode);
+			        $finalcode = str_replace($link, '', $finalcode);
+					$finalcode = str_replace($comment, '', $finalcode);
 					
 					// Added to accomodate iContact changing code
 					if(substr($finalcode, -3, 3) == '");') { $finalcode = substr_replace($finalcode, '', -3, 3); }
@@ -242,19 +243,26 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 	}
 	add_shortcode('iContact', 'kwd_ic_shortcode');
 	add_shortcode('icontact', 'kwd_ic_shortcode');
-		
+	
 	
 	function kwd_process_form($src, $https = false, $submit = 'Submit', $inputsize = '', $width = '260', $kwd_number = 1) {
 		
 		if(empty($submit)) { $submit = 'Submit';}
-	
+		if(empty($src)) { return; }
 		// Convert javascript to HTML by stripping js code
 		$error = false;
 		preg_match('/src="(.*)">/', $src, $matches); 
 		
-		$matches[0] = str_ireplace('src="', '', $matches[0]);
-		$matches[0] = str_ireplace('">', '', $matches[0]);
-		$src = $matches[0];
+		if(!empty($matches[0])) 
+		{ 
+			$match = $matches[0];
+		} else {
+			$match = $matches[1];
+		}
+		
+		$match = str_replace('src="', '', $match);
+		$match = str_replace('">', '', $match);
+		$src = $match;
 		
 		if (preg_match('/^https?:\/\/.+/', $src)) {
 			if($https) {
@@ -271,62 +279,80 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 				$code = @curl_exec($ch); 
 				@curl_close($ch);
 			}
+			
+			// Added for possible GoDaddy errors
+			// Code from http://davidwalsh.name/godaddy-curl-http-403-errors
+			if(!$code) {
+				$ch = @curl_init();
+				curl_setopt($ch, CURLOPT_VERBOSE, 1);
+				curl_setopt ($ch, CURLOPT_HTTPPROXYTUNNEL, FALSE);
+				curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+				curl_setopt ($ch, CURLOPT_PROXY,'http://proxy.shr.secureserver.net:3128');
+				curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+				curl_setopt ($ch, CURLOPT_URL, $src);
+				curl_setopt ($ch, CURLOPT_TIMEOUT, 120);
+				$code = curl_exec ($ch);
+				@curl_close ($ch);
+			}
 			if(!$code) {
 				$error = true;
 				$errormsg = "\t\t\t===\nYour server configuration does not support this widget.\n\nAsk your host to enable file_get_contents() or curl()\n\t\t\t===";
 			}
 		} else {
 			$errormsg = 'The iContact file was not accessible for some reason.';
+			$errormsg .= 'matches: '.print_r($matches, true)."<br />";
+			$errormsg .= 'match: '.print_r($match, true)."<br />";
+			$errormsg .= 'src: '.print_r($src, true)."<br />";
 			$error = true;
 		}
 		
 		// Remove JS Formatting
-		$code = str_ireplace('document.write("', '', $code);
-		$code = str_ireplace('<\/script>\n");', '</script>', $code);
-		$code = str_ireplace('\n<\/form>\n");', "\n</form>", $code);
-		$code = str_ireplace('\"', '"', $code);
-		$code = str_ireplace("\'", "'", $code);
-		$code = str_ireplace('TR>', 'tr>', $code);
-		$code = str_ireplace('TD>', 'td>', $code);
-		$code = str_ireplace('font>', 'font>', $code);
-		$code = str_ireplace('<\/', '</', $code);
-		$code = str_ireplace('\n', "\n", $code);
-		$code = str_ireplace('if (document.location.protocol === "https:")', '', $code);
-		$code = str_ireplace('document.icpsignup.action = "https://app.icontact.com/icp/signup.php";', '', $code);
+		$code = str_replace('document.write("', '', $code);
+		$code = str_replace('<\/script>\n");', '</script>', $code);
+		$code = str_replace('\n<\/form>\n");', "\n</form>", $code);
+		$code = str_replace('\"', '"', $code);
+		$code = str_replace("\'", "'", $code);
+		$code = str_replace('TR>', 'tr>', $code);
+		$code = str_replace('TD>', 'td>', $code);
+		$code = str_replace('font>', 'font>', $code);
+		$code = str_replace('<\/', '</', $code);
+		$code = str_replace('\n', "\n", $code);
+		$code = str_replace('if (document.location.protocol === "https:")', '', $code);
+		$code = str_replace('document.icpsignup.action = "https://app.icontact.com/icp/signup.php";', '', $code);
 		
 		// Fix XHTML issues
-		$code = str_ireplace('type=text', 'type="text"', $code);
-		$code = str_ireplace('type=hidden', 'type="hidden"', $code);
-		$code = str_ireplace('name=formid', 'name="formid"', $code);
-		$code = str_ireplace('name=reallistid', 'name="reallistid"', $code);
-		$code = str_ireplace('name=doubleopt', 'name="doubleopt"', $code);
-		$code = str_ireplace('name=errorredirect', 'name="errorredirect"', $code);
-		$code = str_ireplace('name=redirect', 'name="redirect"', $code);
-		$code = str_ireplace('valign=top', 'valign="top"', $code);
-		$code = str_ireplace('align=right', 'align="right"', $code);
-		$code = str_ireplace('align=left', 'align="left"', $code);
-		$code = str_ireplace('method=post', 'method="post"', $code);
-		$code = str_ireplace('method="post"', 'method="post" class="iContactForm"', $code);
-		$code = str_ireplace('name=clientid', 'name="clientid"', $code);
-		$code = str_ireplace('</tr><td', '</tr><tr><td', $code);
-		$code = str_ireplace('<style>', '<style type="text/css">', $code);
-		$code = str_ireplace('<input type="hidden" name="redirect"', '<div><input type="hidden" name="redirect"', $code);
-		$code = str_ireplace('<script type="text/javascript">', '</div><script type="text/javascript">', $code);
+		$code = str_replace('type=text', 'type="text"', $code);
+		$code = str_replace('type=hidden', 'type="hidden"', $code);
+		$code = str_replace('name=formid', 'name="formid"', $code);
+		$code = str_replace('name=reallistid', 'name="reallistid"', $code);
+		$code = str_replace('name=doubleopt', 'name="doubleopt"', $code);
+		$code = str_replace('name=errorredirect', 'name="errorredirect"', $code);
+		$code = str_replace('name=redirect', 'name="redirect"', $code);
+		$code = str_replace('valign=top', 'valign="top"', $code);
+		$code = str_replace('align=right', 'align="right"', $code);
+		$code = str_replace('align=left', 'align="left"', $code);
+		$code = str_replace('method=post', 'method="post"', $code);
+		$code = str_replace('method="post"', 'method="post" class="iContactForm"', $code);
+		$code = str_replace('name=clientid', 'name="clientid"', $code);
+		$code = str_replace('</tr><td', '</tr><tr><td', $code);
+		$code = str_replace('<style>', '<style type="text/css">', $code);
+		$code = str_replace('<input type="hidden" name="redirect"', '<div><input type="hidden" name="redirect"', $code);
+		$code = str_replace('<script type="text/javascript">', '</div><script type="text/javascript">', $code);
 		$code = preg_replace('/<input([^<]+?[^\/])>/i', '<input$1 />', $code); // Add trailing slashes to inputs
-		$code = str_ireplace('<div id="SignUp">', '<div class="SignUp">', $code); // for multiple instances
-		$code = str_ireplace("document.getElementById(\'", "document.getElementById('", $code);
+		$code = str_replace('<div id="SignUp">', '<div class="SignUp">', $code); // for multiple instances
+		$code = str_replace("document.getElementById(\'", "document.getElementById('", $code);
 		
 		
 		// Add numbering
-		$code = str_ireplace('name="icpsignup"', 'name="icpsignup'.$kwd_number.'"', $code);
-		$code = str_ireplace('verifyRequired()', 'verifyRequired'.$kwd_number.'()', $code);
-		$code = str_ireplace('document.icpsignup', 'document.icpsignup'.$kwd_number, $code);
-		$code = str_ireplace('icpForm', 'icpForm'.$kwd_number, $code);
+		$code = str_replace('name="icpsignup"', 'name="icpsignup'.$kwd_number.'"', $code);
+		$code = str_replace('verifyRequired()', 'verifyRequired'.$kwd_number.'()', $code);
+		$code = str_replace('document.icpsignup', 'document.icpsignup'.$kwd_number, $code);
+		$code = str_replace('icpForm', 'icpForm'.$kwd_number, $code);
 		
 		// Enter custom values
-		$code = str_ireplace('value="Submit"', 'value="'.$submit.'"', $code);
-		$code = str_ireplace('type="text" name="', 'type="text" size="'.$inputsize.'" name="', $code);
-		$code = str_ireplace('<table width="260"', '<table width="'.$width.'"', $code);
+		$code = str_replace('value="Submit"', 'value="'.$submit.'"', $code);
+		$code = str_replace('type="text" name="', 'type="text" size="'.$inputsize.'" name="', $code);
+		$code = str_replace('<table width="260"', '<table width="'.$width.'"', $code);
 		
 		if(!$error) {
 			return $code;
@@ -371,50 +397,6 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 		}
 	}
 	
-	if(!function_exists(php_compat_str_ireplace)) {
-		function php_compat_str_ireplace($search, $replace, $subject)
-		{
-		    // Sanity check
-		    if (is_string($search) && is_array($replace)) {
-		        user_error('Array to string conversion', E_USER_NOTICE);
-		        $replace = (string) $replace;
-		    }
-		
-		    // If search isn't an array, make it one
-		    $search = (array) $search;
-		    $length_search = count($search);
-		
-		    // build the replace array
-		    $replace = is_array($replace)
-			? array_pad($replace, $length_search, '')
-			: array_pad(array(), $length_search, $replace);
-		
-		    // If subject is not an array, make it one
-		    $was_string = false;
-		    if (is_string($subject)) {
-		        $was_string = true;
-		        $subject = array ($subject);
-		    }
-		
-		    // Prepare the search array
-		    foreach ($search as $search_key => $search_value) {
-		        $search[$search_key] = '/' . preg_quote($search_value, '/') . '/i';
-		    }
-		    
-		    // Prepare the replace array (escape backreferences)
-		    $replace = str_replace(array('\\', '$'), array('\\\\', '\$'), $replace);
-		
-		    $result = preg_replace($search, $replace, $subject);
-		    return $was_string ? $result[0] : $result;
-		}
-	}
 	
-	// Define
-	if (!function_exists('str_ireplace')) {
-	    function str_ireplace($search, $replace, $subjectl)
-	    {
-	        return php_compat_str_ireplace($search, $replace, $subject);
-	    }
-	}
 }
 ?>
