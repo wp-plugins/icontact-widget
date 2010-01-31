@@ -31,6 +31,9 @@ iContact is a leader in email newsletters and surveys. Their toolset is cost eff
 
 == Changelog ==
 
+= 1.0.9.1 =
+* Updated with the GPL license
+
 = 1.0.9 =
 * Should fix "The iContact file was not accessible for some reason." issue that was experienced by users with certain hosting configurations
 
