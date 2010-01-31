@@ -75,3 +75,6 @@ iContact is a leader in email newsletters and surveys. Their toolset is cost eff
 
 = 1.0 =
 * Launched widget
+
+== License ==
+* This plugin is released under a GPL license.
