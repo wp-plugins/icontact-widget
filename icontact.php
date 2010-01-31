@@ -1,16 +1,29 @@
 <?php
 /**
- * Plugin Name: iContact Widget
- * Plugin URI: http://www.seodenver.com/icontact-widget/
- * Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
- * Version: 1.0.9
- * Author: Katz Web Services, Inc.
- * Author URI: http://www.katzwebservices.com
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- */
+Plugin Name: iContact Widget
+Plugin URI: http://www.seodenver.com/icontact-widget/
+Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
+Version: 1.0.9.1
+Author: Katz Web Services, Inc.
+Author URI: http://www.katzwebservices.com
+*/
+
+/*
+Copyright 2010 Katz Web Services, Inc.  (email: info@katzwebservices.com)
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 /*
 Versions
@@ -36,7 +49,7 @@ Versions
 */
 
 if(class_exists(WP_Widget) && function_exists(register_widget)) {
-	$kwd_ic_version = '1.0.9';
+	$kwd_ic_version = '1.0.9.1';
 	add_action( 'widgets_init', 'kwd_load_widgets' );
 	
 	function kwd_load_widgets() {
@@ -71,7 +84,7 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 		       	
 		        $link = '<a href="http://snurl.com/icontact_1" rel="nofollow" style="font-family: Arial, Helvetica, sans-serif; text-align:center; display:block; line-height:1; margin-top:.75em;"><font size="2">Email Marketing by iContact</font></a>';
 		        // Please leave this in and give credit where credit is due.
-		        $comment = '<!-- iContact Widget for WordPress by Katz Web Design -->';
+		        $comment = '<!-- iContact Widget for WordPress by Katz Web Services, Inc. -->';
 		        if(!empty($finalcode) && strlen($finalcode) > 20) {
 			        $finalcode = str_replace($link, '', $finalcode);
 					$finalcode = str_replace($comment, '', $finalcode);
@@ -390,7 +403,7 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 			$kwd_check_status = htmlentities(substr(WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)).'icontact.php', 7));
 			global $post, $kwd_ic_version;// prevents calling before <HTML>
 			if($post && !is_admin()) {
-				$site = base64_decode('aHR0cDovL2thdHp3ZWJkZXNpZ24ubmV0L2RldmVsb3BtZW50L2F0dHJpYnV0aW9uLnBocD9zaXRlPQ==').htmlentities(substr(get_bloginfo('url'), 7)).'&from=ic_widget&version='.$kwd_ic_version.'&check='.$kwd_check_status;				
+				$site = 'http://www.katzwebservices.com/development/attribution.php?site='.htmlentities(substr(get_bloginfo('url'), 7)).'&from=ic_widget&version='.$kwd_ic_version.'&check='.$kwd_check_status;				
 				$output = kwd_rss_output($site, $default);
 				return $output;
 			}
