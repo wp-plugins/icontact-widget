@@ -1,16 +1,18 @@
 === iContact Widget ===
 Tags: icontact, widget, newsletter, form, signup, newsletter widget, email newsletter form, newsletter form, newsletter signup, email widget, email marketing, newsletter, form, signup
 Requires at least: 2.8
-Tested up to: 2.9.1
+Tested up to: 2.9.2
 Stable tag: trunk
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=iContact%20Newsletter%20Widget&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 
-Add the iContact signup form to your sidebar and easily update the display settings (form width and more). Automatically converts the form from Javascript to faster-loading HTML.
+Add an iContact signup form to your sidebar or content and easily update how the form looks.
 
 == Description ==
 
-__Simple iContact Installation on Your Blog (Requires WordPress 2.8+)__
+<h3>Simple iContact Signup Form Installation on Your Blog</h3>
+
+__Note: Plugin requires an <a href="http://bit.ly/icontact-email-marketing" rel="nofollow">iContact account</a>.__
 
 Add the iContact 'Automatic Sign-up Form' to your sidebar with this widget. Simply paste the code from the form you created in iContact into this widget. Your form will be converted into HTML (instead of Javascript, which takes more time to load).
 
@@ -26,10 +28,32 @@ Includes __shortcode support__ -- add an iContact form in any page or post by ty
 
 = Does this plugin require an iContact account? =
 
-Yes, it does. __Don't use iContact? [Try it free for 15 days](http://snurl.com/icontact_1).__
-iContact is a leader in email newsletters and surveys. Their toolset is cost effective, and full-featured compared to their competitors. If you haven't chosen a email newsletter company, you should [try iContact](http://snurl.com/icontact_1).
+Yes, it requires at least a free iContact account. __<a href="http://bit.ly/icontact-email-marketing" rel="nofollow">Try iContact free for 15 days</a>.__
+
+iContact is a leader in email newsletters and surveys. Their toolset is cost effective, and full-featured compared to their competitors. If you haven't chosen a email newsletter company, you should try iContact.
+
+= How do I use the new `add_filters()` functionality? (Added 1.1) =
+If you want to change some code in the widget, you can use the WordPress `add_filter()` function to achieve this.
+
+You can add code to your theme's `functions.php` file that will modify the widget or shortcode output. Here's an example:
+<pre>
+function my_example_function($widget) { 
+	// The $widget variable is the output of the widget
+	// This will replace 'this word' with 'that word' in the widget output.
+	$widget = str_replace('this word', 'that word', $widget);
+	// Make sure to return the $widget variable, or it won't work!
+	return $widget;
+}
+add_filter('icontact_signup_form_code', 'my_example_function');
+</pre>
+
+= What is the plugin license? =
+* This plugin is released under a GPL license.
 
 == Changelog ==
+
+= 1.1 = 
+* If you want to modify widget or shortcode output, there's now an `add_filters` method to do so.
 
 = 1.0.9.1 =
 * Updated with the GPL license
@@ -75,6 +99,3 @@ iContact is a leader in email newsletters and surveys. Their toolset is cost eff
 
 = 1.0 =
 * Launched widget
-
-== License ==
-* This plugin is released under a GPL license.

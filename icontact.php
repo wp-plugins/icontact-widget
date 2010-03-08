@@ -3,7 +3,7 @@
 Plugin Name: iContact Widget
 Plugin URI: http://www.seodenver.com/icontact-widget/
 Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
-Version: 1.0.9.1
+Version: 1.1
 Author: Katz Web Services, Inc.
 Author URI: http://www.katzwebservices.com
 */
@@ -46,10 +46,11 @@ Versions
 		- Improved wording for widget's code override option
 1.0.8	- Added support for PHP4 servers by defining str_replace()
 1.0.9	- Attempted fix for certain hosting configurations
+1.1		- If you want to modify widget or shortcode output, there's now an `add_filters` method to do so.
 */
 
 if(class_exists(WP_Widget) && function_exists(register_widget)) {
-	$kwd_ic_version = '1.0.9.1';
+	$kwd_ic_version = '1.1';
 	add_action( 'widgets_init', 'kwd_load_widgets' );
 	
 	function kwd_load_widgets() {
@@ -67,6 +68,7 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 	 
 	    function widget($args, $instance) {      
 	        extract( $args );
+	        $output = '';
 	        if($instance['hide'] != 'yes') {
 	        
 		        $finalcode = '';
@@ -82,7 +84,7 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 		        //$altnumber = rand(0, 1000000);
 		       	$finalcode = str_replace('icpsignup', 'icpsignup'.$this->number, $finalcode);
 		       	
-		        $link = '<a href="http://snurl.com/icontact_1" rel="nofollow" style="font-family: Arial, Helvetica, sans-serif; text-align:center; display:block; line-height:1; margin-top:.75em;"><font size="2">Email Marketing by iContact</font></a>';
+		        $link = '<a href="http://bit.ly/icontact-email-marketing" rel="nofollow" style="font-family: Arial, Helvetica, sans-serif; text-align:center; display:block; line-height:1; margin-top:.75em;"><font size="2">Email Marketing by iContact</font></a>';
 		        // Please leave this in and give credit where credit is due.
 		        $comment = '<!-- iContact Widget for WordPress by Katz Web Services, Inc. -->';
 		        if(!empty($finalcode) && strlen($finalcode) > 20) {
@@ -94,14 +96,14 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 					
 			       	$attr = attr();
 					if(!empty($attr)) { $finalcode .= $attr.$comment; } else { $finalcode .= $link.$comment; } 
-		        ?>
-		              <?php echo $before_widget; ?>
-		                  <?php echo $before_title . $title . $after_title; ?>
-		 
-		                      <?php echo "\n\t".$finalcode."\n\t"; ?>
-		 
-		              <?php echo $after_widget; ?>
-		        <?php
+
+						$output .= $before_widget;
+		                $output .=  $before_title . $title . $after_title;
+		                $output .=  "\n\t".$finalcode."\n\t"; 
+						$output .=  $after_widget; 
+						
+						$output = apply_filters('icontact_signup_form_code', $output);
+						echo $output;
 		        // If there is no finalcode generated
 		        } else {
 					echo '
@@ -251,6 +253,7 @@ if(class_exists(WP_Widget) && function_exists(register_widget)) {
 		        } else {
 		        	$finalcode = $settings[$id]['generated_code'];
 		        }
+		        $finalcode = apply_filters('icontact_signup_form_code', $finalcode);
 				return $finalcode;
 			} // get sidebar settings, echo finalcode
 	}
