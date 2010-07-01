@@ -1,7 +1,7 @@
 === iContact Widget ===
 Tags: icontact, widget, newsletter, form, signup, newsletter widget, email newsletter form, newsletter form, newsletter signup, email widget, email marketing, newsletter, form, signup
 Requires at least: 2.8
-Tested up to: 2.9.2
+Tested up to: 3.0
 Stable tag: trunk
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=iContact%20Newsletter%20Widget&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
