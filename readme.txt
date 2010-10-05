@@ -1,7 +1,7 @@
 === iContact Widget ===
 Tags: icontact, widget, newsletter, form, signup, newsletter widget, email newsletter form, newsletter form, newsletter signup, email widget, email marketing, newsletter, form, signup
 Requires at least: 2.8
-Tested up to: 3.0
+Tested up to: 3.0.1
 Stable tag: trunk
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=iContact%20Newsletter%20Widget&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
@@ -12,7 +12,7 @@ Add an iContact signup form to your sidebar or content and easily update how the
 
 <h3>Simple iContact Signup Form Installation on Your Blog</h3>
 
-__Note: Plugin requires an <a href="http://bit.ly/icontact-email-marketing" rel="nofollow">iContact account</a>.__
+> <strong>This great plugin requires an <a href="http://bit.ly/icontact-email-marketing" rel="nofollow">iContact account</a>. Sign up for free today.
 
 Add the iContact 'Automatic Sign-up Form' to your sidebar with this widget. Simply paste the code from the form you created in iContact into this widget. Your form will be converted into HTML (instead of Javascript, which takes more time to load).
 
