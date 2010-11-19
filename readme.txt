@@ -12,13 +12,18 @@ Add an iContact signup form to your sidebar or content and easily update how the
 
 <h3>Simple iContact Signup Form Installation on Your Blog</h3>
 
-> <strong>This great plugin requires an <a href="http://bit.ly/icontact-email-marketing" rel="nofollow">iContact account</a>. Sign up for free today.
+__Note: Plugin requires an <a href="http://bit.ly/icontact-email-marketing" rel="nofollow">iContact account</a>.__
 
 Add the iContact 'Automatic Sign-up Form' to your sidebar with this widget. Simply paste the code from the form you created in iContact into this widget. Your form will be converted into HTML (instead of Javascript, which takes more time to load).
 
-Change the width of your form, the submit button text, and more! (Check out the screenshot.)
+### iContact Widget Configuration Options
 
-Includes __shortcode support__ -- add an iContact form in any page or post by typing `[iContact]` inside the page or post content.
+* Change the width of your form
+* Change the submit button text
+* Choose which page to redirect users to upon successful completion
+* Open the form in a new window
+
+The plugin includes __shortcode support__ -- add an iContact form into your page or post!
 
 == Screenshots ==
 
@@ -51,6 +56,25 @@ add_filter('icontact_signup_form_code', 'my_example_function');
 * This plugin is released under a GPL license.
 
 == Changelog ==
+
+= 1.2 =
+* Added support for servers without `curl()` by using WP's built-in `wp_remote_get()` functionality.
+* Added options
+	- Choose page URL to redirect users to on successful signup
+	- Choose error page URL
+	- Open forms in new window
+* Added filters
+	- `icontact_widget_style` - Modify the CSS style output
+	- `icontact_widget_script`  - Modify the Javascript output
+	- `icontact_link` - Modify iContact link output
+* Rewrote plugin output functionality
+	- CSS styles now added to website `<head>`
+	- Javascript now added to website footer
+	- The form's "* = Required Field" row now has a CSS class `required`
+* Made widget interface better
+	- Updated instructions to be more clear
+	- Fixed link to iContact instructions
+	- Improved layout of widget by hiding unnecessary items
 
 = 1.1 = 
 * If you want to modify widget or shortcode output, there's now an `add_filters` method to do so.
