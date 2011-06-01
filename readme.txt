@@ -52,6 +52,11 @@ function my_example_function($widget) {
 add_filter('icontact_signup_form_code', 'my_example_function');
 </pre>
 
+= How do I remove the link to iContact? =
+Add the following code to your theme's `functions.php` file:
+
+`add_filter('icontact_link', create_function('$a', 'return false;'));`
+
 = What is the plugin license? =
 * This plugin is released under a GPL license.
 
