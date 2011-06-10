@@ -12,7 +12,7 @@ Add an iContact signup form to your sidebar or content and easily update how the
 
 <h3>Simple iContact Signup Form Installation on Your Blog</h3>
 
-> This plugin requires an <strong><a href="http://bit.ly/icontact-email-marketing" rel="nofollow">iContact account</a></strong>.
+> This plugin requires an <strong><a href="http://www.icontact.com/a.pl/483190" rel="nofollow">iContact account</a></strong>.
 
 Add the iContact 'Automatic Sign-up Form' to your sidebar with this widget. Simply paste the code from the form you created in iContact into this widget. Your form will be converted into HTML (instead of Javascript, which takes more time to load).
 
@@ -33,7 +33,7 @@ The plugin includes __shortcode support__ -- add an iContact form into your page
 
 = Does this plugin require an iContact account? =
 
-Yes, it requires at least a free iContact account. __<a href="http://bit.ly/icontact-email-marketing" rel="nofollow">Try iContact free for 15 days</a>.__
+Yes, it requires at least a free iContact account. __<a href="http://www.icontact.com/a.pl/483190" rel="nofollow">Try iContact free for 15 days</a>.__
 
 iContact is a leader in email newsletters and surveys. Their toolset is cost effective, and full-featured compared to their competitors. If you haven't chosen a email newsletter company, you should try iContact.
 
