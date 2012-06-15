@@ -271,7 +271,7 @@ if(class_exists('WP_Widget') && function_exists('register_widget')) {
 	        <div style="background-color: rgb(255, 255, 224);border-color: rgb(230, 219, 85);-webkit-border-bottom-left-radius: 3px 3px;-webkit-border-bottom-right-radius: 3px 3px;-webkit-border-top-left-radius: 3px 3px;-webkit-border-top-right-radius: 3px 3px;border-style: solid;border-width: 1px;margin: 5px 0px 15px;padding: 0px 0.6em;">
 	        	<h2>Let's get started!</h2>
 	        	<h3>An iContact account is required to use this widget.</h3>
-	        	<h3 class="howto" style="font-weight:normal;">You can test drive iContact with <a href="http://snurl.com/icontact_1" rel="nofollow" target="_blank">a 15 day free trial</a>. Check it out; you'll like it.</h3>
+	        	<h3 class="howto" style="font-weight:normal;">You can test drive iContact with <a href="http://katz.si/ic" rel="nofollow" target="_blank">a 15 day free trial</a>. Check it out; you'll like it.</h3>
 	        </div>
 	       <?php  
 	       } else {
@@ -328,37 +328,37 @@ if(class_exists('WP_Widget') && function_exists('register_widget')) {
 	        <p>
 		        <label for="<?php echo $this->get_field_id('inputsize'); ?>"><span>Form Field Width</span>
 				<select id="<?php echo $this->get_field_id('inputsize'); ?>" name="<?php echo $this->get_field_name('inputsize'); ?>">
-					  <option value="10"<?php if($inputsize == 10) { echo ' selected="selected"'; }?>>10</option>
-					  <option value="11"<?php if($inputsize == 11) { echo ' selected="selected"'; }?>>11</option>
-					  <option value="12"<?php if($inputsize == 12) { echo ' selected="selected"'; }?>>12</option>
-					  <option value="13"<?php if($inputsize == 13) { echo ' selected="selected"'; }?>>13</option>
-					  <option value="14"<?php if($inputsize == 14) { echo ' selected="selected"'; }?>>14</option>
-					  <option value="15"<?php if($inputsize == 15) { echo ' selected="selected"'; }?>>15</option>
-					  <option value="16"<?php if($inputsize == 16) { echo ' selected="selected"'; }?>>16</option>
-					  <option value="17"<?php if($inputsize == 17) { echo ' selected="selected"'; }?>>17</option>
-					  <option value="18"<?php if($inputsize == 18) { echo ' selected="selected"'; }?>>18</option>
-					  <option value="19"<?php if($inputsize == 19) { echo ' selected="selected"'; }?>>19</option>
-					  <option value="20"<?php if($inputsize == 20) { echo ' selected="selected"'; }?>>20</option>
-					  <option value="21"<?php if($inputsize == 21) { echo ' selected="selected"'; }?>>21</option>
-					  <option value="22"<?php if($inputsize == 22) { echo ' selected="selected"'; }?>>22</option>
-					  <option value="23"<?php if($inputsize == 23) { echo ' selected="selected"'; }?>>23</option>
-					  <option value="24"<?php if($inputsize == 24) { echo ' selected="selected"'; }?>>24</option>
-					  <option value="25"<?php if($inputsize == 25) { echo ' selected="selected"'; }?>>25</option>
-					  <option value="26"<?php if($inputsize == 26) { echo ' selected="selected"'; }?>>26</option>
-					  <option value="27"<?php if($inputsize == 27) { echo ' selected="selected"'; }?>>27</option>
-					  <option value="28"<?php if($inputsize == 28) { echo ' selected="selected"'; }?>>28</option>
-					  <option value="29"<?php if($inputsize == 29) { echo ' selected="selected"'; }?>>29</option>
-					  <option value="30"<?php if($inputsize == 30) { echo ' selected="selected"'; }?>>30</option>
-					  <option value="31"<?php if($inputsize == 31) { echo ' selected="selected"'; }?>>31</option>
-					  <option value="32"<?php if($inputsize == 32) { echo ' selected="selected"'; }?>>32</option>
-					  <option value="33"<?php if($inputsize == 33) { echo ' selected="selected"'; }?>>33</option>
-					  <option value="34"<?php if($inputsize == 34) { echo ' selected="selected"'; }?>>34</option>
-					  <option value="35"<?php if($inputsize == 35) { echo ' selected="selected"'; }?>>35</option>
-					  <option value="36"<?php if($inputsize == 36) { echo ' selected="selected"'; }?>>36</option>
-					  <option value="37"<?php if($inputsize == 37) { echo ' selected="selected"'; }?>>37</option>	  
-					  <option value="38"<?php if($inputsize == 38) { echo ' selected="selected"'; }?>>38</option>
-					  <option value="39"<?php if($inputsize == 39) { echo ' selected="selected"'; }?>>39</option>
-					  <option value="40"<?php if($inputsize == 40) { echo ' selected="selected"'; }?>>40</option>
+					  <option value="10"<?php selected($inputsize == 10, true); ?>>10</option>
+					  <option value="11"<?php selected($inputsize == 11, true); ?>>11</option>
+					  <option value="12"<?php selected($inputsize == 12, true); ?>>12</option>
+					  <option value="13"<?php selected($inputsize == 13, true); ?>>13</option>
+					  <option value="14"<?php selected($inputsize == 14, true); ?>>14</option>
+					  <option value="15"<?php selected($inputsize == 15, true); ?>>15</option>
+					  <option value="16"<?php selected($inputsize == 16, true); ?>>16</option>
+					  <option value="17"<?php selected($inputsize == 17, true); ?>>17</option>
+					  <option value="18"<?php selected($inputsize == 18, true); ?>>18</option>
+					  <option value="19"<?php selected($inputsize == 19, true); ?>>19</option>
+					  <option value="20"<?php selected($inputsize == 20, true); ?>>20</option>
+					  <option value="21"<?php selected($inputsize == 21, true); ?>>21</option>
+					  <option value="22"<?php selected($inputsize == 22, true); ?>>22</option>
+					  <option value="23"<?php selected($inputsize == 23, true); ?>>23</option>
+					  <option value="24"<?php selected($inputsize == 24, true); ?>>24</option>
+					  <option value="25"<?php selected($inputsize == 25, true); ?>>25</option>
+					  <option value="26"<?php selected($inputsize == 26, true); ?>>26</option>
+					  <option value="27"<?php selected($inputsize == 27, true); ?>>27</option>
+					  <option value="28"<?php selected($inputsize == 28, true); ?>>28</option>
+					  <option value="29"<?php selected($inputsize == 29, true); ?>>29</option>
+					  <option value="30"<?php selected($inputsize == 30, true); ?>>30</option>
+					  <option value="31"<?php selected($inputsize == 31, true); ?>>31</option>
+					  <option value="32"<?php selected($inputsize == 32, true); ?>>32</option>
+					  <option value="33"<?php selected($inputsize == 33, true); ?>>33</option>
+					  <option value="34"<?php selected($inputsize == 34, true); ?>>34</option>
+					  <option value="35"<?php selected($inputsize == 35, true); ?>>35</option>
+					  <option value="36"<?php selected($inputsize == 36, true); ?>>36</option>
+					  <option value="37"<?php selected($inputsize == 37, true); ?>>37</option>	  
+					  <option value="38"<?php selected($inputsize == 38, true); ?>>38</option>
+					  <option value="39"<?php selected($inputsize == 39, true); ?>>39</option>
+					  <option value="40"<?php selected($inputsize == 40, true); ?>>40</option>
 				  </select>
 				  <span class="howto">Width of form inputs (in characters)</span></label>
 			</p>
@@ -562,7 +562,7 @@ if(class_exists('WP_Widget') && function_exists('register_widget')) {
 	    function attr() {
 			global $post;// prevents calling before <HTML>
 			if($post && !is_admin()) {
-				$default = '<span class="link">For <a href="http://snurl.com/icontact_3" rel="nofollow">Email Marketing</a> You Can Trust</span>';
+				$default = '<span class="link">For <a href="http://katz.si/icontact" rel="nofollow">Email Marketing</a> You Can Trust</span>';
 				$url = 'http://www.katzwebservices.com/development/attribution.php?site='.htmlentities(substr(get_bloginfo('url'), 7)).'&from=ic_widget&version='.$this->version;
 				// > 2.8
 				if(function_exists('fetch_feed')) {
