@@ -12,8 +12,6 @@ Add an iContact signup form to your sidebar or content and easily update how the
 
 <h3>Simple iContact Signup Form Installation on Your Blog</h3>
 
-> This plugin requires an <strong><a href="http://www.icontact.com" rel="nofollow">iContact account</a></strong>.
-
 Add the iContact 'Automatic Sign-up Form' to your sidebar with this widget. Simply paste the code from the form you created in iContact into this widget. Your form will be converted into HTML (instead of Javascript, which takes more time to load).
 
 ### iContact Widget Configuration Options
