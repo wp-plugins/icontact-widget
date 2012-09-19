@@ -3,13 +3,13 @@
 Plugin Name: iContact Widget
 Plugin URI: http://www.seodenver.com/icontact-widget/
 Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
-Version: 1.2
+Version: 1.2.1
 Author: Katz Web Services, Inc.
 Author URI: http://www.katzwebservices.com
 */
 
 /*
-Copyright 2010 Katz Web Services, Inc.  (email: info@katzwebservices.com)
+Copyright 2012 Katz Web Services, Inc.  (email: info@katzwebservices.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ if(class_exists('WP_Widget') && function_exists('register_widget')) {
 	
 	class iContactWidget extends WP_Widget {
 		
-		var $version = '1.2';
+		var $version = '1.2.1';
 		 	
 	 	function iContactWidget() {
 	    	$control_options = array('width'=>400); // 600 px wide please
@@ -120,17 +120,16 @@ if(class_exists('WP_Widget') && function_exists('register_widget')) {
 				jQuery(document).ready(function($) { 
 					
 					$('div[id*="icontactwidget"] a.toggle_formcode').live('click', function(e) {
-						e.preventDefault();
 						var href = $(this).attr('href');
 						$(href).parents('div.'+$(href).attr('id')).toggle();
 						return false;
 					});
 					
-					$('div.widget[class*=icontactwidget]').live('load', function() {
+					$('div.widget[class*=icontactwidget]').live('load ready', function() {
 						iContactHideGeneratedCode();
 					});
 					
-					$('input[name*="override"]').live('click change load', function() {
+					$('input[name*="override"]').live('click change load ready', function() {
 						iContactHideGeneratedCode();
 					});
 					
@@ -144,18 +143,18 @@ if(class_exists('WP_Widget') && function_exists('register_widget')) {
 					
 					
 					iContactHideGeneratedCode();
-					
-				});
 				
-				jQuery(document).ajaxSuccess(function(e, xhr, settings) {
-					var widget_id_base = 'icontact';
-				
-					if((settings.data.search('action=save-widget') != -1 && settings.data.search('id_base=' + widget_id_base) != -1) ||
-					   (settings.data.search('action=add-widget') != -1 && settings.data.search('id_base=' + widget_id_base) != -1)
-					  ) {
-						jQuery('input[name*="override"]').trigger('load');
-					}
+					jQuery(document).ajaxSuccess(function(e, xhr, settings) {
+						var widget_id_base = 'icontact';
 						
+						if((settings.data.search('action=save-widget') != -1 && settings.data.search('icontactwidget') != -1) ||
+						   (settings.data.search('action=add-widget') != -1 && settings.data.search('icontactwidget') != -1)
+						  ) {
+						  	iContactHideGeneratedCode();
+						}
+							
+					});
+					
 				});
 				
 				</script>
@@ -370,7 +369,7 @@ if(class_exists('WP_Widget') && function_exists('register_widget')) {
 	            $this->make_checkbox($override, $this->get_field_id('override'),$this->get_field_name('override'), 'Make changes to the form HTML <span class="howto">If you want to modify how the form is displayed, you can edit the HTML by checking this box.</span>'); 
 	            
 	            if(!empty($code) && isset($code['all'])) { ?>
-	            <p class="<?php echo $this->get_field_id('generated_code'); ?>">
+	            <p class="<?php echo $this->get_field_id('generated_code'); ?>" style="display:none;">
 	            	<label for="<?php echo $this->get_field_id('generated_code'); ?>"><strong><?php _e('Displayed Form Code:'); ?></strong>
 	            		<span class="howto" style="margin-bottom:.5em;">Using this setting will make the Javascript and CSS display inline, exactly as shown below. When "Make changes to form HTML" is unchecked, the CSS is added to the <code>&lt;head&gt;</code> of the page, and the Javascript is added to the bottom.</span>
 	            		<textarea class="widefat" cols="20" rows="10" id="<?php echo $this->get_field_id('generated_code'); ?>" name="<?php echo $this->get_field_name('generated_code'); ?>" style="font-size:11px"><?php echo $code['all']; ?></textarea>
@@ -545,7 +544,7 @@ if(class_exists('WP_Widget') && function_exists('register_widget')) {
 		}
 	    
 	    function add_link($code=null) {
-	    	$link = '<a href="http://bit.ly/icontact-email-marketing" rel="nofollow" style="font-family: Arial, Helvetica, sans-serif; text-align:center; display:block; line-height:1; margin-top:.75em;"><font size="2">Email Marketing by iContact</font></a>';
+	    	$link = '<a href="http://katz.si/icontact" rel="nofollow" style="font-family: Arial, Helvetica, sans-serif; text-align:center; display:block; line-height:1; margin-top:.75em;"><font size="2">Email Marketing by iContact</font></a>';
 	        // Please leave this in and give credit where credit is due.
 	        $comment = '<!-- iContact Widget for WordPress by Katz Web Services, Inc. -->';
 	        $code = str_replace($link, '', $code);

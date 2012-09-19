@@ -29,12 +29,6 @@ The plugin includes __shortcode support__ -- add an iContact form into your page
 
 == Frequently Asked Questions == 
 
-= Does this plugin require an iContact account? =
-
-Yes, it requires at least a free iContact account. __<a href="http://www.icontact.com" rel="nofollow">Try iContact free for 15 days</a>.__
-
-iContact is a leader in email newsletters and surveys. Their toolset is cost effective, and full-featured compared to their competitors. If you haven't chosen a email newsletter company, you should try iContact.
-
 = How do I use the new `add_filters()` functionality? (Added 1.1) =
 If you want to change some code in the widget, you can use the WordPress `add_filter()` function to achieve this.
 
@@ -58,7 +52,15 @@ Add the following code to your theme's `functions.php` file:
 = What is the plugin license? =
 * This plugin is released under a GPL license.
 
+== Upgrade Notice ==
+
+= 1.2.1 =
+* Fixes some minor backend display issues. No functionality changes.
+
 == Changelog ==
+
+= 1.2.1 =
+* Fixes some widget javascript issues in the backend. Now the widget properly shows and hides the the "Make changes to the form HTML" checkbox shows and hides the "Displayed Form Code" textarea.
 
 = 1.2 =
 * Added support for servers without `curl()` by using WP's built-in `wp_remote_get()` functionality.
