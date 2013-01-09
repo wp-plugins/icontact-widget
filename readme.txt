@@ -25,7 +25,8 @@ The plugin includes __shortcode support__ -- add an iContact form into your page
 
 == Screenshots ==
 
-1. How the widget appears in the Widgets panel 
+1. Set up the widget on the Widgets page
+2. Form settings in the widget's panel once set up
 
 == Frequently Asked Questions == 
 
