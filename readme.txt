@@ -1,7 +1,7 @@
 === iContact Widget ===
 Tags: icontact, widget, newsletter, form, signup, newsletter widget, email newsletter form, newsletter form, newsletter signup, email widget, email marketing, newsletter, form, signup
 Requires at least: 2.8
-Tested up to: 3.4
+Tested up to: 3.5
 Stable tag: trunk
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=iContact%20Newsletter%20Widget&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
@@ -25,7 +25,8 @@ The plugin includes __shortcode support__ -- add an iContact form into your page
 
 == Screenshots ==
 
-1. How the widget appears in the Widgets panel 
+1. Set up the widget on the Widgets page
+2. Form settings in the widget's panel once set up
 
 == Frequently Asked Questions == 
 
@@ -54,10 +55,16 @@ Add the following code to your theme's `functions.php` file:
 
 == Upgrade Notice ==
 
+= 1.2.2 =
+* <strong>Important update!</strong> Fixes issue where form IDs get changed, causing errors (<a href="http://wordpress.org/support/topic/plugin-icontact-widget-weve-experienced-an-error-with-your-request">as reported here</a>).
+
 = 1.2.1 =
 * Fixes some minor backend display issues. No functionality changes.
 
 == Changelog ==
+
+= 1.2.2 =
+* <strong>Important update!</strong> Fixes issue where form IDs get changed, causing errors (<a href="http://wordpress.org/support/topic/plugin-icontact-widget-weve-experienced-an-error-with-your-request">as reported here</a>)
 
 = 1.2.1 =
 * Fixes some widget javascript issues in the backend. Now the widget properly shows and hides the the "Make changes to the form HTML" checkbox shows and hides the "Displayed Form Code" textarea.
