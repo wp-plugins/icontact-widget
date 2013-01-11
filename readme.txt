@@ -23,6 +23,9 @@ Add the iContact 'Automatic Sign-up Form' to your sidebar with this widget. Simp
 
 The plugin includes __shortcode support__ -- add an iContact form into your page or post!
 
+### Get started with iContact today!
+[youtube=http://www.youtube.com/watch?v=AsV-6WlVi_M]
+
 == Screenshots ==
 
 1. Set up the widget on the Widgets page
