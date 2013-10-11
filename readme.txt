@@ -59,6 +59,7 @@ Add the following code to your theme's `functions.php` file:
 * Fixed admin widget for better compatibility with new WordPress jQuery
 * Fixed PHP warning
 * Removed unnecessary admin widget style code
+* Improved caching
 
 = 1.2.2 =
 * <strong>Important update!</strong> Fixes issue where form IDs get changed, causing errors (<a href="http://wordpress.org/support/topic/plugin-icontact-widget-weve-experienced-an-error-with-your-request">as reported here</a>).
