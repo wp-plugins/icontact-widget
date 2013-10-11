@@ -1,12 +1,12 @@
 === iContact Widget ===
 Tags: icontact, widget, newsletter, form, signup, newsletter widget, email newsletter form, newsletter form, newsletter signup, email widget, email marketing, newsletter, form, signup
-Requires at least: 2.8
-Tested up to: 3.5
+Requires at least: 3.2
+Tested up to: 3.6.1
 Stable tag: trunk
-Contributors: katzwebdesign
+Contributors: katzwebdesign, katzwebservices
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=iContact%20Newsletter%20Widget&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 
-Add an iContact signup form to your sidebar or content and easily update how the form looks.
+Add an iContact newsletter signup form to your sidebar or content and easily update how the form looks.
 
 == Description ==
 
@@ -23,22 +23,18 @@ Add the iContact 'Automatic Sign-up Form' to your sidebar with this widget. Simp
 
 The plugin includes __shortcode support__ -- add an iContact form into your page or post!
 
-### Get started with iContact today!
-[youtube=http://www.youtube.com/watch?v=AsV-6WlVi_M]
-
 == Screenshots ==
 
-1. Set up the widget on the Widgets page
-2. Form settings in the widget's panel once set up
+1. How the widget appears in the Widgets panel
 
-== Frequently Asked Questions == 
+== Frequently Asked Questions ==
 
 = How do I use the new `add_filters()` functionality? (Added 1.1) =
 If you want to change some code in the widget, you can use the WordPress `add_filter()` function to achieve this.
 
 You can add code to your theme's `functions.php` file that will modify the widget or shortcode output. Here's an example:
 <pre>
-function my_example_function($widget) { 
+function my_example_function($widget) {
 	// The $widget variable is the output of the widget
 	// This will replace 'this word' with 'that word' in the widget output.
 	$widget = str_replace('this word', 'that word', $widget);
@@ -58,6 +54,12 @@ Add the following code to your theme's `functions.php` file:
 
 == Upgrade Notice ==
 
+= 1.3 =
+* Tested with WordPress 3.6.1
+* Fixed admin widget for better compatibility with new WordPress jQuery
+* Fixed PHP warning
+* Removed unnecessary admin widget style code
+
 = 1.2.2 =
 * <strong>Important update!</strong> Fixes issue where form IDs get changed, causing errors (<a href="http://wordpress.org/support/topic/plugin-icontact-widget-weve-experienced-an-error-with-your-request">as reported here</a>).
 
@@ -65,6 +67,12 @@ Add the following code to your theme's `functions.php` file:
 * Fixes some minor backend display issues. No functionality changes.
 
 == Changelog ==
+
+= 1.3 =
+* Tested with WordPress 3.6.1
+* Fixed admin widget for better compatibility with new WordPress jQuery
+* Fixed minor PHP warning
+* Removed unnecessary admin widget style code
 
 = 1.2.2 =
 * <strong>Important update!</strong> Fixes issue where form IDs get changed, causing errors (<a href="http://wordpress.org/support/topic/plugin-icontact-widget-weve-experienced-an-error-with-your-request">as reported here</a>)
@@ -91,7 +99,7 @@ Add the following code to your theme's `functions.php` file:
 	- Fixed link to iContact instructions
 	- Improved layout of widget by hiding unnecessary items
 
-= 1.1 = 
+= 1.1 =
 * If you want to modify widget or shortcode output, there's now an `add_filters` method to do so.
 
 = 1.0.9.1 =
@@ -103,7 +111,7 @@ Add the following code to your theme's `functions.php` file:
 = 1.0.8 =
 * Fixed incompatibility for servers running PHP4 by adding `str_ireplace()` function definition
 
-= 1.0.7 = 
+= 1.0.7 =
 * Updated form to compensate for changed iContact javascript formatting (if your form shows `");` at the end of it, this will fix it)
 * Updated widget so that it will not load for users < WordPress 2.8, preventing errors
 * Improved wording for widget's code override option
@@ -121,10 +129,10 @@ Add the following code to your theme's `functions.php` file:
 * Fixed shortcode bug that had inserted form before content, instead of where inserted in content.
 * Improved code to save update form on the first save
 
-= 1.0.4 = 
+= 1.0.4 =
 * Added `name=clientid` formatting cleanup
 
-= 1.0.3 = 
+= 1.0.3 =
 * Added missing closing </form> tag to signup form.
 * Added widget description for the wp-admin Widgets page.
 
@@ -132,7 +140,7 @@ Add the following code to your theme's `functions.php` file:
 * Improved error handling, and prevented form from being shown until it works properly.
 * Added settings: Edit HTML capability, Change input width, Change Submit input text, Change form width
 
-= 1.0.1 = 
+= 1.0.1 =
 * Added PHP `file_get_content()` error handling
 * Added HTTPS form option
 
