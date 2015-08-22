@@ -3,7 +3,7 @@
 Plugin Name: iContact Widget
 Plugin URI: http://www.seodenver.com/icontact-widget/
 Description: Add the iContact signup form to your sidebar and easily update the display settings & convert the form from Javascript to faster-loading HTML.
-Version: 1.3
+Version: 1.3.1
 Author: Katz Web Services, Inc.
 Author URI: http://www.katzwebservices.com
 */
@@ -37,10 +37,10 @@ if(class_exists('WP_Widget') && function_exists('register_widget')) {
 
 		var $version = '1.3';
 
-	 	function iContactWidget() {
+	 	function __construct() {
 	    	$control_options = array('width'=>400); // 600 px wide please
 	        $widget_options = array('description'=>'Add an iContact form to your and start adding to your lists!', 'classname' => 'icontact');
-	        parent::WP_Widget(false, $name = 'iContact Signup Form', $widget_options, $control_options);
+	        parent::__construct(false, $name = 'iContact Signup Form', $widget_options, $control_options);
 
 	        // Putting this here so that we can use functions like is_ssl()
 	        $this->defaults = array(

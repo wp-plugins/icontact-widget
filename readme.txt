@@ -1,7 +1,7 @@
 === iContact Widget ===
 Tags: icontact, widget, newsletter, form, signup, newsletter widget, email newsletter form, newsletter form, newsletter signup, email widget, email marketing, newsletter, form, signup
 Requires at least: 3.2
-Tested up to: 3.6.1
+Tested up to: 4.3
 Stable tag: trunk
 Contributors: katzwebdesign, katzwebservices
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=iContact%20Newsletter%20Widget&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
@@ -54,6 +54,9 @@ Add the following code to your theme's `functions.php` file:
 
 == Upgrade Notice ==
 
+= 1.3.1 =
+* Fixed issue with WordPress 4.3
+
 = 1.3 =
 * Tested with WordPress 3.6.1
 * Fixed admin widget for better compatibility with new WordPress jQuery
@@ -67,6 +70,9 @@ Add the following code to your theme's `functions.php` file:
 * Fixes some minor backend display issues. No functionality changes.
 
 == Changelog ==
+
+= 1.3.1 =
+* Fixed issue with WordPress 4.3
 
 = 1.3 =
 * Tested with WordPress 3.6.1
